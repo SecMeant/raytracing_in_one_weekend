@@ -2,6 +2,8 @@
 
 #include <fmt/format.h>
 
+#include "vec3.h"
+
 int main()
 {
 	using fmt::print;
@@ -20,15 +22,17 @@ int main()
 	for (int j = 0; j < image_height; ++j) {
 		print(stderr, "\rScanlines remaining: {}", image_height - j);
 		for (int i = 0; i < image_width; ++i) {
-			const auto r = double(i) / (image_width - 1);
-			const auto g = double(j) / (image_height - 1);
-			const auto b = 0.0;
+			auto color = glm::vec3 {
+				float(i) / (image_width - 1),
+				float(j) / (image_height - 1),
+				0.0f
+			};
 
-			const auto ir = int(255.999 * r);
-			const auto ig = int(255.999 * g);
-			const auto ib = int(255.999 * b);
+			color *= 255.999f;
 
-			print(output_image, "{} {} {}\n", ir, ig, ib);
+			const auto color_u3 = glm::uvec3(color);
+
+			print(output_image, "{} {} {}\n", color_u3.r, color_u3.g, color_u3.b);
 		}
 	}
 
